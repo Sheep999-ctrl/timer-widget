@@ -56,4 +56,96 @@
     }
 
     .icon-btn:hover {
-        background: #b5b5b5
+        background: #b5b5b5;
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <input id="setTime" class="time-input" placeholder="3:00 または 180">
+    <div id="display" class="timer">03:00</div>
+
+    <button class="icon-btn" onclick="startTimer()">▶</button>
+    <button class="icon-btn" onclick="stopTimer()">⏸</button>
+    <button class="icon-btn" onclick="resetTimer()">🔄</button>
+</div>
+
+<audio id="alarmSound">
+    <source src="https://actions.google.com/sounds/v1/alarms/alarm_clock.ogg" type="audio/ogg">
+</audio>
+
+<script>
+let time = 180;
+let timer = null;
+
+// テキスト形式（mm:ss / 秒数）を解析して秒に変換
+function parseInput(input) {
+    if (input.includes(":")) {
+        const [m, s] = input.split(":").map(Number);
+        return m * 60 + s;
+    }
+    return Number(input);
+}
+
+function updateDisplay() {
+    document.getElementById("display").textContent =
+        String(Math.floor(time / 60)).padStart(2, '0') + ":" +
+        String(time % 60).padStart(2, '0');
+}
+
+function startTimer() {
+    if (timer) return;
+
+    // 入力があれば時間を更新
+    const input = document.getElementById("setTime").value.trim();
+    if (input) {
+        const parsed = parseInput(input);
+        if (!isNaN(parsed) && parsed > 0) {
+            time = parsed;
+            updateDisplay();
+        }
+    }
+
+    timer = setInterval(() => {
+        time--;
+        updateDisplay();
+        if (time <= 0) {
+            clearInterval(timer);
+            timer = null;
+            document.getElementById("alarmSound").play();
+        }
+    }, 1000);
+}
+
+function stopTimer() {
+    clearInterval(timer);
+    timer = null;
+}
+
+function resetTimer() {
+    clearInterval(timer);
+    timer = null;
+
+    // 入力に合わせてリセット
+    const input = document.getElementById("setTime").value.trim();
+    if (input) {
+        const parsed = parseInput(input);
+        if (!isNaN(parsed) && parsed > 0) {
+            time = parsed;
+        } else {
+            time = 180;
+        }
+    } else {
+        time = 180;
+    }
+
+    updateDisplay();
+}
+
+// 初期表示
+updateDisplay();
+</script>
+
+</body>
+</html>
