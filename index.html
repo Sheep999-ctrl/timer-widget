@@ -28,14 +28,15 @@
         margin-bottom: 15px;
     }
 
+    /* 自由入力欄をさらに短く */
     .time-input {
-        padding: 5px 8px; 
+        padding: 4px 6px; 
         font-size: 1rem;
         border: 2px solid #ccc;
         border-radius: 10px;
         margin-top: 20px; 
         text-align: center;
-        width: 80px; 
+        width: 50px;  /* 短くしました */
     }
 
     .icon-btn {
@@ -72,7 +73,7 @@
     <input id="setTime" class="time-input" placeholder="3:00">
 </div>
 
-<!-- 最初のアラーム音 -->
+<!-- 終了音（最初のアラーム音） -->
 <audio id="alarmSound" preload="auto">
     <source src="https://actions.google.com/sounds/v1/alarms/alarm_clock.ogg" type="audio/ogg">
 </audio>
@@ -82,7 +83,6 @@ let time = 180;
 let timer = null;
 let alarmPlayed = false;
 
-// 入力文字列を秒に変換
 function parseInput(input) {
     if (input.includes(":")) {
         const [m, s] = input.split(":").map(Number);
@@ -91,14 +91,12 @@ function parseInput(input) {
     return Number(input);
 }
 
-// タイマー表示更新
 function updateDisplay() {
     document.getElementById("display").textContent =
         String(Math.floor(time / 60)).padStart(2, '0') + ":" +
         String(time % 60).padStart(2, '0');
 }
 
-// タイマー開始
 function startTimer() {
     if (timer) return;
 
@@ -111,7 +109,6 @@ function startTimer() {
 
     alarmPlayed = false;
 
-    // ユーザー操作で音を読み込む（自動再生制限回避）
     const audio = document.getElementById("alarmSound");
     audio.play().then(() => audio.pause()).catch(()=>{});
 
@@ -131,13 +128,11 @@ function startTimer() {
     }, 1000);
 }
 
-// タイマー停止
 function stopTimer() {
     clearInterval(timer);
     timer = null;
 }
 
-// タイマーリセット
 function resetTimer() {
     clearInterval(timer);
     timer = null;
