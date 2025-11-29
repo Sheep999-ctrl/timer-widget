@@ -3,89 +3,57 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>3分タイマー</title>
+<title>可変タイマー</title>
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400&display=swap');
 
     body {
-        font-family: "Fredoka", sans-serif; /* 丸いフォント */
+        font-family: "Fredoka", sans-serif;
         display: flex;
         justify-content: center;
         align-items: center;
         height: 100vh;
         margin: 0;
-        background: #e8e8e8;  /* 薄いグレー背景 */
+        background: transparent; /* 背景なし */
     }
 
     .container {
         text-align: center;
-        background: #ffffff;
-        padding: 40px 50px;
-        border-radius: 20px;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.15);
     }
 
     .timer {
         font-size: 4rem;
-        font-weight: 600;
+        font-weight: 300;
         color: #333;
+        margin-bottom: 15px;
+    }
+
+    .time-input {
+        padding: 8px 12px;
+        font-size: 1.1rem;
+        border: 2px solid #ccc;
+        border-radius: 10px;
         margin-bottom: 20px;
+        text-align: center;
+        width: 140px;
     }
 
-    button {
-        padding: 12px 25px;
-        font-size: 1.2rem;
-        cursor: pointer;
+    .icon-btn {
+        width: 50px;
+        height: 50px;
+        font-size: 1.6rem;
+        border-radius: 50%;     /* 丸ボタン */
         border: none;
-        border-radius: 12px;
-        background-color: #4CAF50;
-        color: white;
-        font-family: "Fredoka", sans-serif;
+        background: #ccc;       /* グレー */
+        color: #333;
+        cursor: pointer;
+        margin: 0 8px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
         transition: 0.2s;
+        font-family: "Fredoka", sans-serif;
     }
 
-    button:hover {
-        background-color: #45a049;
-    }
-</style>
-</head>
-<body>
-
-<div class="container">
-    <div id="display" class="timer">03:00</div>
-    <button onclick="startTimer()">スタート</button>
-</div>
-
-<!-- アラーム音 -->
-<audio id="alarmSound">
-    <source src="https://actions.google.com/sounds/v1/alarms/alarm_clock.ogg" type="audio/ogg">
-</audio>
-
-<script>
-let time = 180; // 3分
-let timer;
-
-function startTimer() {
-    clearInterval(timer);
-    time = 180;
-    document.getElementById("display").textContent = "03:00";
-
-    timer = setInterval(() => {
-        time--;
-
-        // 表示を更新
-        document.getElementById("display").textContent =
-            String(Math.floor(time / 60)).padStart(2, '0') + ":" +
-            String(time % 60).padStart(2, '0');
-
-        // 0になったらアラームを鳴らす
-        if (time <= 0) {
-            clearInterval(timer);
-            document.getElementById("alarmSound").play();
-        }
-    }, 1000);
-}
-</script>
-
-</body>
-</html>
+    .icon-btn:hover {
+        background: #b5b5b5
