@@ -22,32 +22,32 @@
     }
 
     .timer {
-        font-size: 4rem;
+        font-size: 3rem;       /* 小さめ */
         font-weight: 300;
         color: #333;
         margin-bottom: 15px;
     }
 
     .time-input {
-        padding: 8px 12px;
-        font-size: 1.1rem;
+        padding: 6px 10px;     /* 小さく */
+        font-size: 1rem;
         border: 2px solid #ccc;
         border-radius: 10px;
-        margin-bottom: 20px;
+        margin-top: 20px;      /* 下に移動 */
         text-align: center;
-        width: 140px;
+        width: 120px;
     }
 
     .icon-btn {
-        width: 50px;
-        height: 50px;
-        font-size: 1.6rem;
-        border-radius: 50%;     /* 丸ボタン */
+        width: 40px;           /* 小さめ */
+        height: 40px;          /* 小さめ */
+        font-size: 1.2rem;     /* 小さめ */
+        border-radius: 50%;     
         border: none;
-        background: #ccc;       /* グレー */
+        background: #ccc;      
         color: #333;
         cursor: pointer;
-        margin: 0 8px;
+        margin: 0 6px;
         display: inline-flex;
         align-items: center;
         justify-content: center;
@@ -63,23 +63,25 @@
 <body>
 
 <div class="container">
-    <input id="setTime" class="time-input" placeholder="3:00 または 180">
     <div id="display" class="timer">03:00</div>
 
     <button class="icon-btn" onclick="startTimer()">▶</button>
     <button class="icon-btn" onclick="stopTimer()">⏸</button>
-    <button class="icon-btn" onclick="resetTimer()">🔄</button>
+    <button class="icon-btn" onclick="resetTimer()">R</button>
+
+    <input id="setTime" class="time-input" placeholder="3:00 または 180">
 </div>
 
+<!-- 可愛い音（カワイイベル） -->
 <audio id="alarmSound">
-    <source src="https://actions.google.com/sounds/v1/alarms/alarm_clock.ogg" type="audio/ogg">
+    <source src="https://freesound.org/data/previews/276/276020_5121236-lq.ogg" type="audio/ogg">
 </audio>
 
 <script>
 let time = 180;
 let timer = null;
 
-// テキスト形式（mm:ss / 秒数）を解析して秒に変換
+// 入力文字列を秒に変換
 function parseInput(input) {
     if (input.includes(":")) {
         const [m, s] = input.split(":").map(Number);
@@ -97,7 +99,6 @@ function updateDisplay() {
 function startTimer() {
     if (timer) return;
 
-    // 入力があれば時間を更新
     const input = document.getElementById("setTime").value.trim();
     if (input) {
         const parsed = parseInput(input);
@@ -127,7 +128,6 @@ function resetTimer() {
     clearInterval(timer);
     timer = null;
 
-    // 入力に合わせてリセット
     const input = document.getElementById("setTime").value.trim();
     if (input) {
         const parsed = parseInput(input);
@@ -143,7 +143,6 @@ function resetTimer() {
     updateDisplay();
 }
 
-// 初期表示
 updateDisplay();
 </script>
 
