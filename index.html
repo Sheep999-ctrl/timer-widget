@@ -14,7 +14,7 @@
         align-items: center;
         height: 100vh;
         margin: 0;
-        background: transparent; /* 背景なし */
+        background: transparent;
     }
 
     .container {
@@ -22,24 +22,24 @@
     }
 
     .timer {
-        font-size: 3rem;       /* タイマー文字小さめ */
+        font-size: 3rem; 
         font-weight: 300;
         color: #333;
         margin-bottom: 15px;
     }
 
     .time-input {
-        padding: 5px 8px;      /* 小さく */
+        padding: 5px 8px; 
         font-size: 1rem;
         border: 2px solid #ccc;
         border-radius: 10px;
-        margin-top: 20px;      /* 下に配置 */
+        margin-top: 20px; 
         text-align: center;
-        width: 80px;            /* 短めに */
+        width: 80px; 
     }
 
     .icon-btn {
-        width: 40px;           /* ボタン小さめ */
+        width: 40px; 
         height: 40px;
         font-size: 1.2rem;
         border-radius: 50%;     
@@ -72,9 +72,9 @@
     <input id="setTime" class="time-input" placeholder="3:00">
 </div>
 
-<!-- チャイム音（MP3形式） -->
+<!-- 最初のアラーム音 -->
 <audio id="alarmSound" preload="auto">
-    <source src="https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3" type="audio/mpeg">
+    <source src="https://actions.google.com/sounds/v1/alarms/alarm_clock.ogg" type="audio/ogg">
 </audio>
 
 <script>
@@ -122,8 +122,9 @@ function startTimer() {
             clearInterval(timer);
             timer = null;
             if (!alarmPlayed) {
-                document.getElementById("alarmSound").currentTime = 0;
-                document.getElementById("alarmSound").play();
+                const alarm = document.getElementById("alarmSound");
+                alarm.currentTime = 0;
+                alarm.play();
                 alarmPlayed = true;
             }
         }
