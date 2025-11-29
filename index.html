@@ -22,26 +22,26 @@
     }
 
     .timer {
-        font-size: 3rem;       /* 小さめ */
+        font-size: 3rem;       /* タイマー文字小さめ */
         font-weight: 300;
         color: #333;
         margin-bottom: 15px;
     }
 
     .time-input {
-        padding: 6px 10px;     /* 小さく */
+        padding: 5px 8px;      /* 小さく */
         font-size: 1rem;
         border: 2px solid #ccc;
         border-radius: 10px;
-        margin-top: 20px;      /* 下に移動 */
+        margin-top: 20px;      /* 下に配置 */
         text-align: center;
-        width: 120px;
+        width: 80px;            /* 短めに */
     }
 
     .icon-btn {
-        width: 40px;           /* 小さめ */
-        height: 40px;          /* 小さめ */
-        font-size: 1.2rem;     /* 小さめ */
+        width: 40px;           /* ボタン小さめ */
+        height: 40px;
+        font-size: 1.2rem;
         border-radius: 50%;     
         border: none;
         background: #ccc;      
@@ -69,17 +69,18 @@
     <button class="icon-btn" onclick="stopTimer()">⏸</button>
     <button class="icon-btn" onclick="resetTimer()">R</button>
 
-    <input id="setTime" class="time-input" placeholder="3:00 または 180">
+    <input id="setTime" class="time-input" placeholder="3:00">
 </div>
 
-<!-- 可愛い音（カワイイベル） -->
-<audio id="alarmSound">
-    <source src="https://freesound.org/data/previews/276/276020_5121236-lq.ogg" type="audio/ogg">
+<!-- チャイム音（MP3形式） -->
+<audio id="alarmSound" preload="auto">
+    <source src="https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3" type="audio/mpeg">
 </audio>
 
 <script>
 let time = 180;
 let timer = null;
+let alarmPlayed = false;
 
 // 入力文字列を秒に変換
 function parseInput(input) {
@@ -90,23 +91,29 @@ function parseInput(input) {
     return Number(input);
 }
 
+// タイマー表示更新
 function updateDisplay() {
     document.getElementById("display").textContent =
         String(Math.floor(time / 60)).padStart(2, '0') + ":" +
         String(time % 60).padStart(2, '0');
 }
 
+// タイマー開始
 function startTimer() {
     if (timer) return;
 
     const input = document.getElementById("setTime").value.trim();
     if (input) {
         const parsed = parseInput(input);
-        if (!isNaN(parsed) && parsed > 0) {
-            time = parsed;
-            updateDisplay();
-        }
+        if (!isNaN(parsed) && parsed > 0) time = parsed;
+        updateDisplay();
     }
+
+    alarmPlayed = false;
+
+    // ユーザー操作で音を読み込む（自動再生制限回避）
+    const audio = document.getElementById("alarmSound");
+    audio.play().then(() => audio.pause()).catch(()=>{});
 
     timer = setInterval(() => {
         time--;
@@ -114,32 +121,31 @@ function startTimer() {
         if (time <= 0) {
             clearInterval(timer);
             timer = null;
-            document.getElementById("alarmSound").play();
+            if (!alarmPlayed) {
+                document.getElementById("alarmSound").currentTime = 0;
+                document.getElementById("alarmSound").play();
+                alarmPlayed = true;
+            }
         }
     }, 1000);
 }
 
+// タイマー停止
 function stopTimer() {
     clearInterval(timer);
     timer = null;
 }
 
+// タイマーリセット
 function resetTimer() {
     clearInterval(timer);
     timer = null;
-
     const input = document.getElementById("setTime").value.trim();
     if (input) {
         const parsed = parseInput(input);
-        if (!isNaN(parsed) && parsed > 0) {
-            time = parsed;
-        } else {
-            time = 180;
-        }
-    } else {
-        time = 180;
-    }
-
+        if (!isNaN(parsed) && parsed > 0) time = parsed;
+        else time = 180;
+    } else time = 180;
     updateDisplay();
 }
 
